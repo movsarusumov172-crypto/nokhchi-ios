@@ -74,7 +74,8 @@ struct DraftVideoView: View {
                 do {
                     try FileManager.default.removeItem(at: video.url)
                 } catch {
-                    store.errorMessage = "Не удалось удалить временное видео: "
+                    store.errorMessage =
+                        "Не удалось удалить временное видео: "
                         + error.localizedDescription
                 }
             }
