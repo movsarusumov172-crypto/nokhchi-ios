@@ -11,12 +11,14 @@ struct BusinessDetailView: View {
     var body: some View {
         List {
             Section {
-                Image(business.photo)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(maxWidth: .infinity, maxHeight: 240)
-                    .accessibilityLabel("Фото организации со скриншота")
-                    .listRowBackground(Color(uiColor: .systemBackground))
+                if !business.photo.isEmpty {
+                    Image(business.photo)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(maxWidth: .infinity, maxHeight: 240)
+                        .accessibilityLabel("Фото организации со скриншота")
+                        .listRowBackground(Color(uiColor: .systemBackground))
+                }
                 Text(business.name).font(.title.bold()).textSelection(.enabled)
                 Label(business.category.title, systemImage: business.category.symbol)
                 if let city = business.city {
@@ -52,6 +54,17 @@ struct BusinessDetailView: View {
                     Button("Найти адрес в Apple Maps", systemImage: "map") {
                         Task { await openScreenshotAddress() }
                     }
+                }
+            }
+            if business.id == "screenshot-fullstack" {
+                Section("Описание со снимка") {
+                    Text("Я Fullstack-разработчик. Создаю сайты, приложения, Telegram-ботов "
+                         + "и различные онлайн-сервисы. Могу сделать как красивый и удобный "
+                         + "интерфейс, который видит пользователь, так и внутреннюю систему, "
+                         + "которая отвечает за работу всего проекта. Также занимаюсь "
+                         + "автоматизацией задач, подключением искусственного интеллекта "
+                         + "и разработкой собственных IT-проектов. Проще говоря, превращаю "
+                         + "идеи в работающие программы.")
                 }
             }
             Section {

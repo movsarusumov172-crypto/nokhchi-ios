@@ -7,12 +7,21 @@ struct BusinessRow: View {
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
             if !dynamicTypeSize.isAccessibilitySize {
-                Image(business.photo)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 64, height: 64)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                    .accessibilityHidden(true)
+                if business.photo.isEmpty {
+                    Image(systemName: business.category.symbol)
+                        .font(.title2)
+                        .frame(width: 64, height: 64)
+                        .background(Color(uiColor: .secondarySystemGroupedBackground))
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .accessibilityHidden(true)
+                } else {
+                    Image(business.photo)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 64, height: 64)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .accessibilityHidden(true)
+                }
             }
             VStack(alignment: .leading, spacing: 4) {
                 Text(business.name).font(.headline)

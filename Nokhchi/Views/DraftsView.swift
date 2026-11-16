@@ -7,6 +7,13 @@ struct DraftsView: View {
 
     var body: some View {
         List {
+            if let business = store.businesses.first(where: { $0.id == "screenshot-fullstack" }) {
+                Section("Бизнес со снимка") {
+                    NavigationLink { BusinessDetailView(business: business) } label: {
+                        BusinessRow(business: business)
+                    }
+                }
+            }
             Section {
                 ForEach(store.state.drafts) { draft in
                     Button {
@@ -31,7 +38,9 @@ struct DraftsView: View {
             }
         }
         .overlay {
-            if store.state.drafts.isEmpty {
+            if store.state.drafts.isEmpty && !store.businesses.contains(where: {
+                $0.id == "screenshot-fullstack"
+            }) {
                 ContentUnavailableView(
                     "Нет черновиков", systemImage: "building.2",
                     description: Text("Создайте организацию во вкладке «Добавить».")

@@ -7,8 +7,16 @@ struct PublicProfileView: View {
         List {
             Section { ProfileHeader(name: store.state.userName) }
             Section("Бизнесы участника") {
-                if store.state.drafts.isEmpty {
-                    Text("Нет локальных черновиков").foregroundStyle(.secondary)
+                if let business = store.businesses.first(where: { $0.id == "screenshot-fullstack" }) {
+                    NavigationLink {
+                        BusinessDetailView(business: business)
+                    } label: {
+                        VStack(alignment: .leading) {
+                            Text(business.name)
+                            Text("Гудермес · данные со снимка")
+                                .font(.caption).foregroundStyle(.secondary)
+                        }
+                    }
                 }
                 ForEach(store.state.drafts) { draft in
                     NavigationLink {

@@ -25,7 +25,6 @@ struct Business: Codable, Identifiable, Hashable {
             && (rating.map { $0.isFinite && (0...5).contains($0) } ?? true)
             && (reviewCount.map { $0 >= 0 } ?? true)
             && (cityCenter.map(\.isValid) ?? true)
-            && !photo.isEmpty
     }
 }
 

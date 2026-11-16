@@ -32,5 +32,13 @@
     "name": "ПВЗ ОЗОН",
     "category": "transport",
     "photo": "ozon"
+  },
+  {
+    "id": "screenshot-fullstack",
+    "name": "FullStack разработчик",
+    "category": "technology",
+    "city": "Гудермес",
+    "photo": "",
+    "cityCenter": { "latitude": 43.3519, "longitude": 46.1036 }
   }
 ]

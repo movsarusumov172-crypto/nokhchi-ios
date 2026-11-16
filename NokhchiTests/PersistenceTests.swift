@@ -71,9 +71,9 @@ final class PersistenceTests: XCTestCase {
             directory: FileManager.default.temporaryDirectory
                 .appendingPathComponent(UUID().uuidString))
         XCTAssertNil(store.errorMessage)
-        XCTAssertEqual(store.businesses.count, 4)
+        XCTAssertEqual(store.businesses.count, 5)
         XCTAssertTrue(store.businesses.allSatisfy(\.isValid))
-        XCTAssertEqual(store.businesses.filter { $0.cityCenter != nil }.count, 3)
+        XCTAssertEqual(store.businesses.filter { $0.cityCenter != nil }.count, 4)
         XCTAssertNil(store.businesses.first { $0.id == "screenshot-ozon" }?.rating)
     }
 
