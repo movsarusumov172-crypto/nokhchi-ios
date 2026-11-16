@@ -4,6 +4,9 @@ import SwiftUI
 struct BusinessDetailView: View {
     let business: Business
     @Environment(AppStore.self) private var store
+    @State private var showingReview = false
+    @State private var showingReport = false
+    @State private var mapError: String?
 
     var body: some View {
         List {
@@ -24,6 +27,28 @@ struct BusinessDetailView: View {
                 }
                 if let count = business.reviewCount {
                     LabeledContent("Отзывов на снимке", value: count.formatted())
+                }
+            }
+            if business.id == "screenshot-karak" {
+                Section("Описание со снимка") {
+                    Text("Ресторан Вайнахской кухни. Вкус, который помнят поколения. "
+                         + "Халяльная еда и уютная атмосфера.")
+                }
+                Section("Контакты") {
+                    Text("Телефон, WhatsApp, Instagram и сайт показаны на снимке, "
+                         + "но их адреса не видны.").foregroundStyle(.secondary)
+                }
+                Section("Часы работы на снимке") {
+                    LabeledContent("Каждый день", value: "09:00–01:30")
+                    Text("Актуальное расписание не подтверждено.")
+                        .font(.caption).foregroundStyle(.secondary)
+                }
+                Section("Язык обслуживания") { Text("Русский") }
+                Section("Адрес на снимке") {
+                    Text("Краснодарская улица 60А, Москва, Россия")
+                    Button("Найти адрес в Apple Maps", systemImage: "map") {
+                        Task { await openScreenshotAddress() }
+                    }
                 }
             }
             Section {
@@ -47,19 +72,60 @@ struct BusinessDetailView: View {
             }
             Section("Источник данных") {
                 DemoNotice()
-                Text(
-                    "Название, категория, город и рейтинг перенесены с фото 2. "
-                        + "Точный адрес, контакты и расписание не предоставлены."
-                )
+                Text("Данные перенесены со снимков и могут быть устаревшими.")
                 .foregroundStyle(.secondary)
+            }
+            Section("Отзывы") {
+                if business.id == "screenshot-karak" {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("inbinb · 5 из 5").font(.headline)
+                        Text("Живу рядом с местом, был не раз... кто хочет вспомнить "
+                             + "домашний уют и вкус, место самое подходящее!")
+                        Text("Отзыв со снимка").font(.caption).foregroundStyle(.secondary)
+                    }
+                }
+                ForEach((store.state.reviews ?? []).filter { $0.businessID == business.id }) { review in
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("\(review.author) · \(review.rating) из 5").font(.headline)
+                        Text(review.text)
+                        Text("Локальный отзыв").font(.caption).foregroundStyle(.secondary)
+                    }
+                }
+                Button("Написать отзыв", systemImage: "square.and.pencil") { showingReview = true }
+                Button("Пожаловаться", systemImage: "flag") { showingReport = true }
+                ShareLink(item: "\(business.name) · \(business.category.title)") {
+                    Label("Поделиться", systemImage: "square.and.arrow.up")
+                }
             }
         }
         .navigationTitle("Организация")
         .navigationBarTitleDisplayMode(.inline)
         .sensoryFeedback(.selection, trigger: isFavorite)
+        .sheet(isPresented: $showingReview) { ReviewEditorView(business: business) }
+        .sheet(isPresented: $showingReport) { ReportView() }
+        .alert("Адрес", isPresented: Binding(
+            get: { mapError != nil }, set: { if !$0 { mapError = nil } }
+        )) {
+            Button("Понятно", role: .cancel) { mapError = nil }
+        } message: { Text(mapError ?? "") }
     }
 
     private var isFavorite: Bool { store.state.favorites.contains(business.id) }
+
+    private func openScreenshotAddress() async {
+        let request = MKLocalSearch.Request()
+        request.naturalLanguageQuery = "Краснодарская улица 60А, Москва, Россия"
+        do {
+            let response = try await MKLocalSearch(request: request).start()
+            guard let item = response.mapItems.first else {
+                mapError = "Apple Maps не нашла адрес со снимка."
+                return
+            }
+            item.openInMaps()
+        } catch {
+            mapError = "Не удалось найти адрес: \(error.localizedDescription)"
+        }
+    }
 }
 
 extension GeoPoint {

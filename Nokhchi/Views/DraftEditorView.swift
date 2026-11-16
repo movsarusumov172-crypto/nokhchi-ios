@@ -3,67 +3,20 @@ import SwiftUI
 struct DraftEditorView: View {
     @State var draft: OrganizationDraft
     @State private var original: OrganizationDraft?
+    @State private var step = 2
     @State private var showingDiscard = false
-    @State private var showingMap = false
+    @State private var loadingMedia = false
     @Environment(AppStore.self) private var store
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section {
-                    Picker("Категория", selection: $draft.category) {
-                        ForEach(BusinessCategory.allCases) { category in
-                            Text(category.title).tag(category)
-                        }
-                    }
-                    TextField("Название — до 120 символов", text: $draft.name)
-                        .accessibilityIdentifier("draftName")
-                    TextField("Город — до 100 символов", text: $draft.city)
-                        .accessibilityIdentifier("draftCity")
-                    TextField("Адрес — до 250 символов", text: $draft.address, axis: .vertical)
-                        .lineLimit(2...4)
-                } header: {
-                    Text("Организация")
-                } footer: {
-                    Text("Обязательные поля: название и город. Адрес можно заполнить позже.")
-                }
-                Section("Описание") {
-                    TextField("До 2000 символов", text: $draft.note, axis: .vertical)
-                        .lineLimit(4...10)
-                }
-                Section {
-                    Button(
-                        draft.location == nil ? "Указать точку на карте" : "Изменить точку",
-                        systemImage: "mappin.and.ellipse"
-                    ) {
-                        showingMap = true
-                    }
-                    if let point = draft.location {
-                        Text("\(point.latitude.formatted()), \(point.longitude.formatted())")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                        Button("Удалить точку", role: .destructive) { draft.location = nil }
-                    }
-                } footer: {
-                    Text("Точка выбирается вручную. Геокодирование адреса не выполняется.")
-                }
-                Section {
-                    if let message = store.errorMessage {
-                        Text(message).foregroundStyle(.red)
-                    }
-                    if let message = draft.validationMessage {
-                        Text(message).foregroundStyle(.secondary)
-                    }
-                    Text(
-                        "Черновик хранится только на этом iPhone. "
-                            + "Сервер, модерация и публикация к прототипу не подключены."
-                    )
-                    .foregroundStyle(.secondary)
-                }
+            VStack(spacing: 0) {
+                ProgressView(value: Double(step), total: 7)
+                    .padding(.horizontal)
+                content
             }
-            .scrollDismissesKeyboard(.interactively)
-            .navigationTitle("Черновик")
+            .navigationTitle("\(stepTitle) · \(step)/7")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -72,22 +25,76 @@ struct DraftEditorView: View {
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Сохранить") {
-                        if store.saveDraft(draft) { dismiss() }
-                    }
-                    .disabled(draft.validationMessage != nil)
+                    Button("Сохранить") { saveDraft() }
+                        .disabled(draft.validationMessage != nil || loadingMedia)
                 }
             }
-            .confirmationDialog(
-                "Не сохранять изменения?", isPresented: $showingDiscard,
-                titleVisibility: .visible
-            ) {
-                Button("Не сохранять", role: .destructive) { dismiss() }
+            .safeAreaInset(edge: .bottom) {
+                HStack {
+                    if step > 2 {
+                        Button("Назад") { step -= 1 }.buttonStyle(.bordered)
+                    }
+                    Spacer()
+                    if step < 7 {
+                        Button("Далее") { step += 1 }.buttonStyle(.borderedProminent)
+                            .disabled(loadingMedia)
+                    } else {
+                        Button("Сохранить черновик") { saveDraft() }
+                            .buttonStyle(.borderedProminent)
+                            .disabled(draft.validationMessage != nil)
+                    }
+                }
+                .padding()
+                .background(Color(uiColor: .systemGroupedBackground))
+            }
+            .confirmationDialog("Не сохранять изменения?", isPresented: $showingDiscard,
+                                titleVisibility: .visible) {
+                Button("Не сохранять", role: .destructive) {
+                    removeUnsavedVideo()
+                    dismiss()
+                }
                 Button("Продолжить редактирование", role: .cancel) { showingDiscard = false }
             }
-            .sheet(isPresented: $showingMap) { LocationPickerView(point: $draft.location) }
+            .alert("Не удалось сохранить", isPresented: Binding(
+                get: { store.errorMessage != nil },
+                set: { if !$0 { store.errorMessage = nil } }
+            )) {
+                Button("Понятно", role: .cancel) { store.errorMessage = nil }
+            } message: { Text(store.errorMessage ?? "") }
         }
         .onAppear { if original == nil { original = draft } }
         .interactiveDismissDisabled(draft != original)
+    }
+
+    @ViewBuilder
+    private var content: some View {
+        switch step {
+        case 2: DraftInformationView(draft: $draft)
+        case 3: DraftPhotosView(draft: $draft, loading: $loadingMedia)
+        case 4: DraftVideoView(draft: $draft, originalVideo: original?.videoFile,
+                               loading: $loadingMedia)
+        case 5: DraftAddressView(draft: $draft)
+        case 6: DraftScheduleView(draft: $draft)
+        default: DraftPreviewView(draft: draft)
+        }
+    }
+
+    private var stepTitle: String {
+        switch step {
+        case 2: "Информация"
+        case 3: "Фотографии"
+        case 4: "Видео"
+        case 5: "Адрес"
+        case 6: "Часы работы"
+        default: "Предпросмотр"
+        }
+    }
+
+    private func saveDraft() {
+        if store.saveDraft(draft) { dismiss() }
+    }
+
+    private func removeUnsavedVideo() {
+        if let video = draft.videoFile, video != original?.videoFile { store.removeVideo(video) }
     }
 }

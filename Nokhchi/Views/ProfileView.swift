@@ -16,10 +16,7 @@ struct ProfileView: View {
             }
             Section {
                 NavigationLink {
-                    UnavailableFeatureView(
-                        title: "Сообщения", symbol: "bubble.left.and.bubble.right",
-                        detail: "Переписка требует сервера Nokhchi."
-                    )
+                    MessagesView()
                 } label: {
                     Label("Сообщения", systemImage: "bubble.left.and.bubble.right")
                 }
@@ -76,15 +73,12 @@ struct ProfileView: View {
                         + "Оформление применяется ко всему приложению и сохраняется.")
             }
             Section {
-                informationLink(
-                    "Условия использования", symbol: "doc.text",
-                    detail: "Оригинальный текст условий не предоставлен. "
-                        + "Прототип не публикует организации и не принимает оплату.")
-                informationLink(
-                    "Политика конфиденциальности", symbol: "hand.raised",
-                    detail: "Оригинальная политика не предоставлена. Избранное, "
-                        + "имя и черновики сохраняются локально. Apple Maps использует "
-                        + "сетевые сервисы Apple. Геопозиция запрашивается только кнопкой.")
+                NavigationLink { ScreenshotPolicyView(policy: .terms) } label: {
+                    Label("Условия использования", systemImage: "doc.text")
+                }
+                NavigationLink { ScreenshotPolicyView(policy: .privacy) } label: {
+                    Label("Политика конфиденциальности", systemImage: "hand.raised")
+                }
                 informationLink(
                     "Заблокированные пользователи", symbol: "person.slash",
                     detail: "Список блокировок недоступен без сервера Nokhchi.")

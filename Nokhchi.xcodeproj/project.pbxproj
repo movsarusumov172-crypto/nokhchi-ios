@@ -273,6 +273,16 @@
 				ADE6FC45E83BA7C53C52FAF8,
 				BCF83F9DB9BD652E4FC0DEC0,
 				91881D1AD48D7652C0305989,
+				7FB4AD0EF55A9736DC3C7212,
+				64174F6C7E38ACD3316B5F60,
+				D1A58AE38EDF22634157BA23,
+				DBB876D87A4C3F247A51B8B3,
+				1509FD1738DE56D77F70E3B7,
+				CF253C853D2CD9D529B8026E,
+				B941C07A2D9E40BAD57121C4,
+				B3551FC0203AEB47A16CADFD,
+				4FE49385ACFF48FE808E4E59,
+				76CEA2C1B9051C9CE3A3C0B7,
 			);
 			name = Nokhchi;
 			sourceTree = "<group>";
@@ -438,6 +448,16 @@
 				7AAB0A4A806960AED77A7CC6,
 				162EF7A6C26520A9A7D043CF,
 				851637D7520FABFCD67F4988,
+				69D428614A8DFFDD4EC469DE,
+				60F7956928042204E192DD1D,
+				C4BC90D21E084021830CB7C7,
+				96CD1C4FD4F3A6F41F39A004,
+				4EF4A47002FFDB8D5E06D163,
+				334931390EDB1BE051402F03,
+				E1B5E6DCF00E02FD44F7CF20,
+				976C5561D18E825B0F77FC30,
+				0256B696C9DAEB97DF38A8A5,
+				106BE80032878FD193EB942F,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -783,6 +803,106 @@
 				2ADDEE89B29C55E11126D89F,
 				129964AA630C5970DF325D9E,
 			);
+		};
+		7FB4AD0EF55A9736DC3C7212 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = Nokhchi/Views/DraftAddressView.swift;
+			sourceTree = SOURCE_ROOT;
+		};
+		69D428614A8DFFDD4EC469DE = {
+			isa = PBXBuildFile;
+			fileRef = 7FB4AD0EF55A9736DC3C7212;
+		};
+		64174F6C7E38ACD3316B5F60 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = Nokhchi/Views/DraftInformationView.swift;
+			sourceTree = SOURCE_ROOT;
+		};
+		60F7956928042204E192DD1D = {
+			isa = PBXBuildFile;
+			fileRef = 64174F6C7E38ACD3316B5F60;
+		};
+		D1A58AE38EDF22634157BA23 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = Nokhchi/Views/DraftPhotosView.swift;
+			sourceTree = SOURCE_ROOT;
+		};
+		C4BC90D21E084021830CB7C7 = {
+			isa = PBXBuildFile;
+			fileRef = D1A58AE38EDF22634157BA23;
+		};
+		DBB876D87A4C3F247A51B8B3 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = Nokhchi/Views/DraftPreviewView.swift;
+			sourceTree = SOURCE_ROOT;
+		};
+		96CD1C4FD4F3A6F41F39A004 = {
+			isa = PBXBuildFile;
+			fileRef = DBB876D87A4C3F247A51B8B3;
+		};
+		1509FD1738DE56D77F70E3B7 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = Nokhchi/Views/DraftScheduleView.swift;
+			sourceTree = SOURCE_ROOT;
+		};
+		4EF4A47002FFDB8D5E06D163 = {
+			isa = PBXBuildFile;
+			fileRef = 1509FD1738DE56D77F70E3B7;
+		};
+		CF253C853D2CD9D529B8026E = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = Nokhchi/Views/DraftVideoView.swift;
+			sourceTree = SOURCE_ROOT;
+		};
+		334931390EDB1BE051402F03 = {
+			isa = PBXBuildFile;
+			fileRef = CF253C853D2CD9D529B8026E;
+		};
+		B941C07A2D9E40BAD57121C4 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = Nokhchi/Views/ReportView.swift;
+			sourceTree = SOURCE_ROOT;
+		};
+		E1B5E6DCF00E02FD44F7CF20 = {
+			isa = PBXBuildFile;
+			fileRef = B941C07A2D9E40BAD57121C4;
+		};
+		B3551FC0203AEB47A16CADFD = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = Nokhchi/Views/ReviewEditorView.swift;
+			sourceTree = SOURCE_ROOT;
+		};
+		976C5561D18E825B0F77FC30 = {
+			isa = PBXBuildFile;
+			fileRef = B3551FC0203AEB47A16CADFD;
+		};
+		4FE49385ACFF48FE808E4E59 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = Nokhchi/Views/MessagesView.swift;
+			sourceTree = SOURCE_ROOT;
+		};
+		0256B696C9DAEB97DF38A8A5 = {
+			isa = PBXBuildFile;
+			fileRef = 4FE49385ACFF48FE808E4E59;
+		};
+		76CEA2C1B9051C9CE3A3C0B7 = {
+			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.swift;
+			path = Nokhchi/Views/ScreenshotPolicyView.swift;
+			sourceTree = SOURCE_ROOT;
+		};
+		106BE80032878FD193EB942F = {
+			isa = PBXBuildFile;
+			fileRef = 76CEA2C1B9051C9CE3A3C0B7;
 		};
 	};
 	rootObject = 244210E48437B6556980A702;

@@ -16,6 +16,17 @@ struct OrganizationDraft: Codable, Identifiable, Equatable {
     var note = ""
     var location: GeoPoint?
     var updatedAt = Date()
+    var phone: String?
+    var whatsapp: String?
+    var telegram: String?
+    var instagram: String?
+    var website: String?
+    var languages: [String]?
+    var photos: [Data]?
+    var videoFile: String?
+    var alwaysOpen: Bool?
+    var openingTime: String?
+    var closingTime: String?
 
     var validationMessage: String? {
         if name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -27,11 +38,26 @@ struct OrganizationDraft: Codable, Identifiable, Equatable {
         if name.count > 120 || city.count > 100 || address.count > 250 || note.count > 2000 {
             return "Сократите название, город, адрес или описание до указанных ограничений."
         }
+        if let photos, photos.count > 10 || photos.contains(where: { $0.count > 3_000_000 }) {
+            return "Допускается до 10 фотографий размером до 3 МБ каждая."
+        }
+        if let videoFile, videoFile != URL(fileURLWithPath: videoFile).lastPathComponent {
+            return "Имя видеофайла некорректно."
+        }
         if let location, !location.isValid {
             return "Координаты точки некорректны. Выберите точку заново."
         }
         return nil
     }
+}
+
+struct LocalReview: Codable, Identifiable {
+    var id = UUID()
+    var businessID: String
+    var author: String
+    var rating: Int
+    var text: String
+    var createdAt = Date()
 }
 
 struct LocalState: Codable {
@@ -41,6 +67,7 @@ struct LocalState: Codable {
     var avatarData: Data?
     var favorites: Set<String> = []
     var drafts: [OrganizationDraft] = []
+    var reviews: [LocalReview]?
 
     var isValid: Bool {
         !userName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
@@ -48,5 +75,6 @@ struct LocalState: Codable {
             && (avatarData.map { $0.count <= 1_000_000 } ?? true)
             && drafts.allSatisfy { $0.validationMessage == nil }
             && Set(drafts.map(\.id)).count == drafts.count
+            && (reviews?.allSatisfy { (1...5).contains($0.rating) && !$0.text.isEmpty } ?? true)
     }
 }

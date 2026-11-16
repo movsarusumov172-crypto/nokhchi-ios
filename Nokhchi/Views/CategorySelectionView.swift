@@ -24,10 +24,7 @@ struct CategorySelectionView: View {
                         categoryButton(category)
                     }
                 }
-                Text(
-                    "На фото показан только шаг 1 из 7. Следующие шесть этапов "
-                        + "не предоставлены. Вместо них — локальная форма без публикации."
-                )
+                Text("Далее: информация, фото, видео, адрес, часы работы и предпросмотр.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
             }
