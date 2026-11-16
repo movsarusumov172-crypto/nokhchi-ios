@@ -47,8 +47,9 @@ struct OrganizationDraft: Codable, Identifiable, Equatable {
         if name.count > 120 || city.count > 100 || address.count > 250 || note.count > 2000 {
             return "Сократите название, город, адрес или описание до указанных ограничений."
         }
-        if let photos, photos.count > DraftMediaLimits.maximumPhotos
-            || photos.contains(where: { $0.count > DraftMediaLimits.maximumPhotoBytes })
+        if let photos,
+            photos.count > DraftMediaLimits.maximumPhotos
+                || photos.contains(where: { $0.count > DraftMediaLimits.maximumPhotoBytes })
         {
             return "Допускается до 10 фотографий размером до 3 МБ каждая."
         }

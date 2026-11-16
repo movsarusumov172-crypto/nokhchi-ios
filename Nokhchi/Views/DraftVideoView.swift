@@ -109,7 +109,7 @@ struct DraftVideoView: View {
             }
             let attributes = try FileManager.default.attributesOfItem(atPath: url.path)
             guard let fileSize = attributes[.size] as? NSNumber,
-                  fileSize.intValue <= DraftMediaLimits.maximumVideoBytes
+                fileSize.intValue <= DraftMediaLimits.maximumVideoBytes
             else {
                 errorMessage = "Размер видео не должен превышать 200 МБ."
                 return
@@ -134,7 +134,8 @@ private struct TemporaryVideo: Transferable {
         FileRepresentation(importedContentType: .movie) { file in
             let attributes = try FileManager.default.attributesOfItem(atPath: file.file.path)
             guard let size = attributes[.size] as? NSNumber,
-                  size.intValue <= DraftMediaLimits.maximumVideoBytes else {
+                size.intValue <= DraftMediaLimits.maximumVideoBytes
+            else {
                 throw VideoImportError.tooLarge
             }
             let destination = FileManager.default.temporaryDirectory

@@ -11,8 +11,10 @@ struct DraftPhotosView: View {
     var body: some View {
         Form {
             Section {
-                PhotosPicker(selection: $selection, maxSelectionCount: DraftMediaLimits.maximumPhotos,
-                             matching: .images) {
+                PhotosPicker(
+                    selection: $selection, maxSelectionCount: DraftMediaLimits.maximumPhotos,
+                    matching: .images
+                ) {
                     Label("Выбрать фотографии", systemImage: "photo.on.rectangle.angled")
                 }
                 if loading { ProgressView("Загрузка фотографий") }

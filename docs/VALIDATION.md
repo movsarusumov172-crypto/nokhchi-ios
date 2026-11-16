@@ -2,6 +2,12 @@
 
 ## Дополнительные экраны по 24 снимкам
 
+Окончательный Release с именованными ограничениями медиа собран в публичном
+[run 43854893805](https://github.com/movsarusumov172-crypto/nokhchi-ios/actions/runs/43854893805),
+commit `5afa654`, Xcode 26.3. Линтер и Release прошли. SHA256 неподписанного IPA:
+`6e66ff519ad818fec9dd314f0c250de1b7053c7b5b8db47786825c6d4b0a9a7c`.
+Архив проверен на CRC, Bundle ID и минимальную iOS 17; подписи нет.
+
 Версия с выбором видео из «Фото» и «Файлов» собрана в публичном
 [run 43853940129](https://github.com/movsarusumov172-crypto/nokhchi-ios/actions/runs/43853940129),
 commit `774cbbe`. Release и форматирование прошли. Неподписанный IPA проверен
