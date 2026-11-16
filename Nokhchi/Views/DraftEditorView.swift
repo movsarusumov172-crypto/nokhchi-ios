@@ -40,6 +40,7 @@ struct DraftEditorView: View {
                     Spacer()
                     if step < 7 {
                         Button("Далее") { step += 1 }.buttonStyle(.borderedProminent)
+                            .accessibilityIdentifier("draftNext")
                             .disabled(loadingMedia)
                     } else {
                         Button("Сохранить черновик") { saveDraft() }
