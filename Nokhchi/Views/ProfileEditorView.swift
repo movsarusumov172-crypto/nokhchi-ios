@@ -28,8 +28,9 @@ struct ProfileEditorView: View {
                         store.setUserName(name)
                         if store.errorMessage == nil { dismiss() }
                     }
-                    .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                              || name.count > 80)
+                    .disabled(
+                        name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                            || name.count > 80)
                 }
             }
         }

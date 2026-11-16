@@ -24,10 +24,12 @@ struct CategorySelectionView: View {
                         categoryButton(category)
                     }
                 }
-                Text("На фото показан только шаг 1 из 7. Следующие шесть этапов "
-                     + "не предоставлены. Вместо них — локальная форма без публикации.")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+                Text(
+                    "На фото показан только шаг 1 из 7. Следующие шесть этапов "
+                        + "не предоставлены. Вместо них — локальная форма без публикации."
+                )
+                .font(.footnote)
+                .foregroundStyle(.secondary)
             }
             .padding()
         }

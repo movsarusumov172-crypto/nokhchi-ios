@@ -46,7 +46,8 @@ struct CatalogQuery {
         businesses.filter { business in
             let searchable = [business.name, business.category.title, business.city ?? ""]
                 .joined(separator: " ")
-            let searchMatches = text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+            let searchMatches =
+                text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
                 || searchable.localizedStandardContains(
                     text.trimmingCharacters(in: .whitespacesAndNewlines)
                 )

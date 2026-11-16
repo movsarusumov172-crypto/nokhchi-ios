@@ -1,4 +1,5 @@
 import XCTest
+
 @testable import Nokhchi
 
 final class PersistenceTests: XCTestCase {
@@ -64,8 +65,9 @@ final class PersistenceTests: XCTestCase {
 
     @MainActor
     func testBundledCatalogContainsOnlyScreenshotEntries() {
-        let store = AppStore(directory: FileManager.default.temporaryDirectory
-            .appendingPathComponent(UUID().uuidString))
+        let store = AppStore(
+            directory: FileManager.default.temporaryDirectory
+                .appendingPathComponent(UUID().uuidString))
         XCTAssertNil(store.errorMessage)
         XCTAssertEqual(store.businesses.count, 4)
         XCTAssertTrue(store.businesses.allSatisfy(\.isValid))

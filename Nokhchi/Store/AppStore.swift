@@ -97,7 +97,8 @@ final class AppStore {
             state = decoded
         } catch {
             canSave = false
-            errorMessage = "Локальные данные повреждены или недоступны. "
+            errorMessage =
+                "Локальные данные повреждены или недоступны. "
                 + "Исходный файл сохранён; запись отключена. \(error.localizedDescription)"
         }
     }
@@ -105,7 +106,8 @@ final class AppStore {
     @discardableResult
     private func save(_ next: LocalState) -> Bool {
         guard canSave else {
-            errorMessage = "Запись отключена, чтобы не перезаписать повреждённые данные. "
+            errorMessage =
+                "Запись отключена, чтобы не перезаписать повреждённые данные. "
                 + "Сохраните local-state.json через Files и переустановите приложение."
             return false
         }

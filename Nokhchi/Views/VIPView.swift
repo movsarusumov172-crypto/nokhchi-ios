@@ -10,18 +10,22 @@ struct VIPView: View {
                     .foregroundStyle(.secondary)
             }
             Section("Мои VIP-места") {
-                Text("На фото 6 показан один слот и отсутствие активных VIP-мест. "
-                     + "Это состояние снимка, а не текущий тариф пользователя.")
-                    .foregroundStyle(.secondary)
+                Text(
+                    "На фото 6 показан один слот и отсутствие активных VIP-мест. "
+                        + "Это состояние снимка, а не текущий тариф пользователя."
+                )
+                .foregroundStyle(.secondary)
             }
             Section {
                 NavigationLink("Изменить тариф") {
-                    UnavailableFeatureView(title: "Тариф", symbol: "crown",
-                                           detail: "Тарифы и оплата недоступны без сервера.")
+                    UnavailableFeatureView(
+                        title: "Тариф", symbol: "crown",
+                        detail: "Тарифы и оплата недоступны без сервера.")
                 }
                 NavigationLink("Управлять подпиской") {
-                    UnavailableFeatureView(title: "Подписка", symbol: "creditcard",
-                                           detail: "Платёжные операции в прототипе не выполняются.")
+                    UnavailableFeatureView(
+                        title: "Подписка", symbol: "creditcard",
+                        detail: "Платёжные операции в прототипе не выполняются.")
                 }
             }
         }

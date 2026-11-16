@@ -9,7 +9,9 @@ struct DraftsView: View {
         List {
             Section {
                 ForEach(store.state.drafts) { draft in
-                    Button { selectedDraft = draft } label: {
+                    Button {
+                        selectedDraft = draft
+                    } label: {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(draft.name).font(.headline).foregroundStyle(.primary)
                             Text(draft.category.title).foregroundStyle(.secondary)
@@ -23,8 +25,9 @@ struct DraftsView: View {
                     }
                 }
             } footer: {
-                Text("Новые черновики создаются на вкладке «Добавить». "
-                     + "Они не отправляются на сервер.")
+                Text(
+                    "Новые черновики создаются на вкладке «Добавить». "
+                        + "Они не отправляются на сервер.")
             }
         }
         .overlay {
@@ -33,13 +36,15 @@ struct DraftsView: View {
                     "Нет черновиков", systemImage: "building.2",
                     description: Text("Создайте организацию во вкладке «Добавить».")
                 )
-                    .allowsHitTesting(false)
+                .allowsHitTesting(false)
             }
         }
         .navigationTitle("Мои бизнесы")
         .sheet(item: $selectedDraft) { draft in DraftEditorView(draft: draft) }
-        .confirmationDialog("Удалить локальный черновик?", isPresented: deletionPresented,
-                            titleVisibility: .visible) {
+        .confirmationDialog(
+            "Удалить локальный черновик?", isPresented: deletionPresented,
+            titleVisibility: .visible
+        ) {
             Button("Удалить черновик", role: .destructive) {
                 if let deletingDraft { store.deleteDraft(deletingDraft) }
                 deletingDraft = nil

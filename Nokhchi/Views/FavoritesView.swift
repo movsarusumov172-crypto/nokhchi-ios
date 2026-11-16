@@ -17,8 +17,9 @@ struct FavoritesView: View {
         }
         .overlay {
             if favorites.isEmpty {
-                ContentUnavailableView("Пока пусто", systemImage: "heart",
-                                       description: Text("Добавляйте организации из их карточек."))
+                ContentUnavailableView(
+                    "Пока пусто", systemImage: "heart",
+                    description: Text("Добавляйте организации из их карточек."))
             }
         }
         .navigationTitle("Избранное")

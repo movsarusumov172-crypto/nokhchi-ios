@@ -75,10 +75,11 @@ struct BusinessMapView: View {
         }
         .onChange(of: locationService.location) { _, point in
             if let point {
-                position = .region(MKCoordinateRegion(
-                    center: point.coordinate,
-                    span: MKCoordinateSpan(latitudeDelta: 0.025, longitudeDelta: 0.025)
-                ))
+                position = .region(
+                    MKCoordinateRegion(
+                        center: point.coordinate,
+                        span: MKCoordinateSpan(latitudeDelta: 0.025, longitudeDelta: 0.025)
+                    ))
             }
         }
         .sheet(item: $selectedBusiness, onDismiss: { selectedID = nil }) { business in
@@ -109,10 +110,11 @@ struct BusinessMapView: View {
         ToolbarItem(placement: .topBarLeading) {
             Menu {
                 Button("Гудермес", systemImage: "map") {
-                    position = .region(MKCoordinateRegion(
-                        center: GeoPoint.gudermes.coordinate,
-                        span: MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08)
-                    ))
+                    position = .region(
+                        MKCoordinateRegion(
+                            center: GeoPoint.gudermes.coordinate,
+                            span: MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08)
+                        ))
                 }
                 Button("Все доступные точки", systemImage: "arrow.up.left.and.arrow.down.right") {
                     position = .automatic
@@ -136,16 +138,18 @@ struct BusinessMapView: View {
             List {
                 Section("Начальный регион — Гудермес") {
                     Text("В материалах нет организаций с подтверждённым адресом в Гудермесе.")
-                    Text("Точки каталога обозначают центр указанного города, "
-                         + "а не адрес организации. Масштаб карты можно менять жестами.")
+                    Text(
+                        "Точки каталога обозначают центр указанного города, "
+                            + "а не адрес организации. Масштаб карты можно менять жестами.")
                     Button("Показать доступные точки") {
                         position = .automatic
                         showingSource = false
                     }
                 }
                 Section("Ваши черновики") {
-                    Text("На вкладке «Добавить» можно указать точку на карте. "
-                         + "Сохранённый черновик появится здесь с подписью «черновик».")
+                    Text(
+                        "На вкладке «Добавить» можно указать точку на карте. "
+                            + "Сохранённый черновик появится здесь с подписью «черновик».")
                 }
                 Section { DemoNotice() }
             }

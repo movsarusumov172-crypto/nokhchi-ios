@@ -1,4 +1,5 @@
 import XCTest
+
 @testable import Nokhchi
 
 final class CatalogTests: XCTestCase {
@@ -15,8 +16,9 @@ final class CatalogTests: XCTestCase {
         for search in ["кара", "МОСКВА", "Рестораны", "  Москва  "] {
             var query = CatalogQuery()
             query.text = search
-            XCTAssertEqual(query.apply(to: [restaurant, shop], favorites: []).map(\.id),
-                           [restaurant.id])
+            XCTAssertEqual(
+                query.apply(to: [restaurant, shop], favorites: []).map(\.id),
+                [restaurant.id])
         }
     }
 
@@ -32,8 +34,9 @@ final class CatalogTests: XCTestCase {
     }
 
     func testMissingRatingComesAfterKnownRating() {
-        XCTAssertEqual(CatalogQuery().apply(to: [shop, restaurant], favorites: []).first?.id,
-                       restaurant.id)
+        XCTAssertEqual(
+            CatalogQuery().apply(to: [shop, restaurant], favorites: []).first?.id,
+            restaurant.id)
     }
 
     func testDraftRequiresNameAndCityAndValidCoordinates() {

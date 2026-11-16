@@ -37,8 +37,10 @@ struct ExploreView: View {
         }
         .listStyle(.plain)
         .navigationTitle("Обзор")
-        .searchable(text: $query.text, placement: .navigationBarDrawer(displayMode: .always),
-                    prompt: "Название, категория или город")
+        .searchable(
+            text: $query.text, placement: .navigationBarDrawer(displayMode: .always),
+            prompt: "Название, категория или город"
+        )
         .navigationDestination(for: Business.self) { business in
             BusinessDetailView(business: business)
         }

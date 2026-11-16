@@ -7,9 +7,11 @@ struct PublicProfileView: View {
         List {
             Section { ProfileHeader(name: store.state.userName) }
             Section {
-                Text("Предпросмотр локального профиля. Публичная ссылка, "
-                     + "статистика и серверная публикация не подключены.")
-                    .foregroundStyle(.secondary)
+                Text(
+                    "Предпросмотр локального профиля. Публичная ссылка, "
+                        + "статистика и серверная публикация не подключены."
+                )
+                .foregroundStyle(.secondary)
             }
         }
         .navigationTitle("Публичный профиль")

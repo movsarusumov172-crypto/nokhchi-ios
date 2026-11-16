@@ -4,10 +4,11 @@ import SwiftUI
 struct LocationPickerView: View {
     @Binding var point: GeoPoint?
     @State private var candidate: GeoPoint?
-    @State private var position = MapCameraPosition.region(MKCoordinateRegion(
-        center: GeoPoint.gudermes.coordinate,
-        span: MKCoordinateSpan(latitudeDelta: 0.04, longitudeDelta: 0.04)
-    ))
+    @State private var position = MapCameraPosition.region(
+        MKCoordinateRegion(
+            center: GeoPoint.gudermes.coordinate,
+            span: MKCoordinateSpan(latitudeDelta: 0.04, longitudeDelta: 0.04)
+        ))
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -57,10 +58,11 @@ struct LocationPickerView: View {
         .onAppear {
             let initial = point ?? .gudermes
             candidate = initial
-            position = .region(MKCoordinateRegion(
-                center: initial.coordinate,
-                span: MKCoordinateSpan(latitudeDelta: 0.04, longitudeDelta: 0.04)
-            ))
+            position = .region(
+                MKCoordinateRegion(
+                    center: initial.coordinate,
+                    span: MKCoordinateSpan(latitudeDelta: 0.04, longitudeDelta: 0.04)
+                ))
         }
     }
 }

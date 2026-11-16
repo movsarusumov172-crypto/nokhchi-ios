@@ -33,8 +33,10 @@ struct DraftEditorView: View {
                         .lineLimit(4...10)
                 }
                 Section {
-                    Button(draft.location == nil ? "Указать точку на карте" : "Изменить точку",
-                           systemImage: "mappin.and.ellipse") {
+                    Button(
+                        draft.location == nil ? "Указать точку на карте" : "Изменить точку",
+                        systemImage: "mappin.and.ellipse"
+                    ) {
                         showingMap = true
                     }
                     if let point = draft.location {
@@ -53,9 +55,11 @@ struct DraftEditorView: View {
                     if let message = draft.validationMessage {
                         Text(message).foregroundStyle(.secondary)
                     }
-                    Text("Черновик хранится только на этом iPhone. "
-                         + "Сервер, модерация и публикация к прототипу не подключены.")
-                        .foregroundStyle(.secondary)
+                    Text(
+                        "Черновик хранится только на этом iPhone. "
+                            + "Сервер, модерация и публикация к прототипу не подключены."
+                    )
+                    .foregroundStyle(.secondary)
                 }
             }
             .scrollDismissesKeyboard(.interactively)
@@ -74,8 +78,10 @@ struct DraftEditorView: View {
                     .disabled(draft.validationMessage != nil)
                 }
             }
-            .confirmationDialog("Не сохранять изменения?", isPresented: $showingDiscard,
-                                titleVisibility: .visible) {
+            .confirmationDialog(
+                "Не сохранять изменения?", isPresented: $showingDiscard,
+                titleVisibility: .visible
+            ) {
                 Button("Не сохранять", role: .destructive) { dismiss() }
                 Button("Продолжить редактирование", role: .cancel) { showingDiscard = false }
             }

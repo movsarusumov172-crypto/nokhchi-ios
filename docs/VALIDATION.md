@@ -1,5 +1,30 @@
 # Фактическая проверка — 16 ноября 2026
 
+## Дополнительная сборка в GitHub Actions
+
+По запросу владельца создан репозиторий `movsarusumov172-crypto/nokhchi-ios` и вручную
+запущен workflow `iOS build and tests`, run **43838960638**, исходный commit **572ccb3**.
+В процессе сборки встроенный swift-format применил форматирование исходников;
+полученный `format.patch` перенесён обратно в локальный проект без изменения поведения.
+
+- **Release for iPhone — success**: macos-15, Xcode 26.3, SDK iPhoneOS 26.2, arm64.
+- `swift-format format` и `swift-format lint --strict` прошли на runner.
+- В release.log присутствует `** BUILD SUCCEEDED **`, ошибок компиляции нет.
+- В логе одно предупреждение инструмента AppIntents: metadata extraction skipped,
+  поскольку приложение не использует AppIntents.framework. Это не ошибка компиляции Swift.
+- Артефакт `Nokhchi-unsigned-ipa` скачан на D; SHA256 совпал с контрольной суммой runner.
+- Архив IPA успешно проверен на CRC; внутри `Payload/Nokhchi.app`, Mach-O arm64,
+  Bundle ID `com.movsar.NokhchiRedesign`, MinimumOSVersion `17.0`, platform `iphoneos`.
+- Подписи нет: сборка выполнялась с `CODE_SIGNING_ALLOWED=NO`; _CodeSignature отсутствует.
+- SHA256 IPA: `e4ba7d2b0a39e60fd7de8bd6df746a7407e7772e836cd7f09399c7478f1827dd`.
+- Simulator job отменён по просьбе владельца прекратить расход минут. Тесты и screenshots
+  не подтверждены; общий статус workflow нельзя выдавать за полностью успешные тесты.
+- Workflow имеет только `workflow_dispatch`: push исходников не запускает новую сборку.
+
+[Запуск и артефакты](https://github.com/movsarusumov172-crypto/nokhchi-ios/actions/runs/43838960638).
+
+Далее сохранён отчёт первоначальных локальных проверок до запуска Actions.
+
 ## Доступная среда
 
 Windows, PowerShell, Python 3.12, Git. Исполняемые файлы `swift`, `xcodebuild`,
@@ -43,10 +68,10 @@ Windows, PowerShell, Python 3.12, Git. Исполняемые файлы `swift`
 - `scripts/verify-mac.sh`: формат/линт, Simulator tests и Release-компиляция без подписи.
 - `scripts/archive.sh`: подписанный архив и экспорт с реальными Team/ExportOptions.
 
-`swift-format` недоступен в этой среде; его lint/format не запускались.
-Компиляция Debug/Release, XCTest/XCUITest, симулятор, IPA, реальный iPhone,
-VoiceOver, реальная геолокация и визуальная оценка **не проверены**.
-Готовой IPA и скриншотов работающего нового приложения в комплекте нет.
+На локальной Windows-среде `swift-format` и Xcode недоступны. Последующая удалённая
+проверка формата, линт и Release-компиляция подтверждены выше. XCTest/XCUITest,
+симулятор, реальный iPhone, VoiceOver, реальная геолокация и визуальная оценка
+**не проверены**. Неподписанный IPA получен, скриншотов работающего приложения нет.
 
 ## Проверить на Mac перед установкой
 

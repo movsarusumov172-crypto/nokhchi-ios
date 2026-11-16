@@ -107,7 +107,7 @@ jobs:
             xcrun xcresulttool export attachments --path build/Tests.xcresult \
               --output-path build/screenshots
             xcrun xcresulttool get test-results summary --path build/Tests.xcresult \
-              --format json > build/test-summary.json
+              > build/test-summary.json
           fi
 
       - name: Package simulator app
