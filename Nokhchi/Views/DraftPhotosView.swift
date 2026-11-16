@@ -11,7 +11,8 @@ struct DraftPhotosView: View {
     var body: some View {
         Form {
             Section {
-                PhotosPicker(selection: $selection, maxSelectionCount: 10, matching: .images) {
+                PhotosPicker(selection: $selection, maxSelectionCount: DraftMediaLimits.maximumPhotos,
+                             matching: .images) {
                     Label("Выбрать фотографии", systemImage: "photo.on.rectangle.angled")
                 }
                 if loading { ProgressView("Загрузка фотографий") }
@@ -62,9 +63,9 @@ struct DraftPhotosView: View {
                 guard let data = try await item.loadTransferable(type: Data.self),
                     let image = UIImage(data: data),
                     let pixels = image.cgImage,
-                    min(pixels.width, pixels.height) >= 1080,
+                    min(pixels.width, pixels.height) >= DraftMediaLimits.minimumPhotoPixels,
                     let jpeg = image.jpegData(compressionQuality: 0.7),
-                    jpeg.count <= 3_000_000
+                    jpeg.count <= DraftMediaLimits.maximumPhotoBytes
                 else {
                     errorMessage =
                         "Фото должно быть не меньше 1080 пикселей по короткой стороне и до 3 МБ после сжатия."
