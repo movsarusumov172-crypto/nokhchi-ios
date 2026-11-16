@@ -7,7 +7,8 @@ struct PublicProfileView: View {
         List {
             Section { ProfileHeader(name: store.state.userName) }
             Section("Бизнесы участника") {
-                if let business = store.businesses.first(where: { $0.id == "screenshot-fullstack" }) {
+                if let business = store.businesses.first(where: { $0.id == "screenshot-fullstack" })
+                {
                     NavigationLink {
                         BusinessDetailView(business: business)
                     } label: {
