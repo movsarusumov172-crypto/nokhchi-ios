@@ -2,6 +2,7 @@ import MapKit
 import SwiftUI
 
 struct BusinessMapView: View {
+    @Binding var selectedTab: Int
     @Environment(AppStore.self) private var store
     @State private var locationService = LocationService()
     @State private var position = MapCameraPosition.region(
@@ -15,6 +16,7 @@ struct BusinessMapView: View {
     @State private var selectedBusiness: Business?
     @State private var selectedDraft: OrganizationDraft?
     @State private var showingSource = false
+    @State private var showingNotifications = false
 
     private var businesses: [Business] {
         store.businesses.filter { category == nil || $0.category == category }
@@ -51,23 +53,61 @@ struct BusinessMapView: View {
             MapCompass()
             MapScaleView()
         }
+        .ignoresSafeArea()
         .safeAreaInset(edge: .top, spacing: 0) {
-            CategoryStrip(selection: $category)
-                .background(Color(uiColor: .systemBackground))
+            VStack(spacing: 4) {
+                HStack {
+                    Button { selectedTab = 3 } label: {
+                        ProfileAvatar(name: store.state.userName, data: store.state.avatarData, size: 40)
+                    }
+                    .accessibilityLabel("Открыть профиль")
+                    Spacer()
+                    Button { showingNotifications = true } label: {
+                        Image(systemName: "bell")
+                            .frame(width: 44, height: 44)
+                            .background(.regularMaterial, in: Circle())
+                    }
+                    .accessibilityLabel("Уведомления")
+                }
+                .padding(.horizontal)
+                CategoryStrip(selection: $category)
+            }
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            Button {
-                showingSource = true
-            } label: {
-                Label("Локальные данные · о точках на карте", systemImage: "info.circle")
-                    .font(.footnote)
-                    .frame(maxWidth: .infinity, minHeight: 44)
+            HStack(alignment: .bottom) {
+                Button { showingSource = true } label: {
+                    Label("О карте", systemImage: "info.circle")
+                        .padding(10)
+                        .background(.regularMaterial, in: Capsule())
+                }
+                Spacer()
+                Menu {
+                    Button("Гудермес", systemImage: "map") {
+                        position = .region(MKCoordinateRegion(
+                            center: GeoPoint.gudermes.coordinate,
+                            span: MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08)
+                        ))
+                    }
+                    Button("Все доступные точки", systemImage: "globe") { position = .automatic }
+                } label: {
+                    Image(systemName: "globe.europe.africa")
+                        .frame(width: 44, height: 44)
+                        .background(.regularMaterial, in: Circle())
+                }
+                .accessibilityLabel("Регион карты")
+                Button { locationService.requestLocation() } label: {
+                    Image(systemName: "location.fill")
+                        .frame(width: 44, height: 44)
+                        .background(.regularMaterial, in: Circle())
+                }
+                .accessibilityLabel("Моё местоположение")
+                .disabled(locationService.isRequesting)
             }
-            .background(Color(uiColor: .systemBackground))
+            .padding(.horizontal)
+            .padding(.bottom, 8)
         }
-        .navigationTitle("Карта")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar { mapToolbar }
+        .toolbar(.hidden, for: .navigationBar)
+        .toolbarBackground(.hidden, for: .tabBar)
         .onChange(of: selectedID) { _, identifier in
             guard let identifier else { return }
             selectedBusiness = businesses.first { $0.id == identifier }
@@ -98,38 +138,23 @@ struct BusinessMapView: View {
             DraftEditorView(draft: draft)
         }
         .sheet(isPresented: $showingSource) { mapInformation }
+        .sheet(isPresented: $showingNotifications) {
+            NavigationStack {
+                UnavailableFeatureView(
+                    title: "Уведомления", symbol: "bell",
+                    detail: "Уведомления недоступны: сервер Nokhchi не подключён."
+                )
+                .toolbar {
+                    ToolbarItem(placement: .confirmationAction) {
+                        Button("Готово") { showingNotifications = false }
+                    }
+                }
+            }
+        }
         .alert("Геопозиция", isPresented: locationError) {
             Button("Понятно", role: .cancel) { locationService.errorMessage = nil }
         } message: {
             Text(locationService.errorMessage ?? "")
-        }
-    }
-
-    @ToolbarContentBuilder
-    private var mapToolbar: some ToolbarContent {
-        ToolbarItem(placement: .topBarLeading) {
-            Menu {
-                Button("Гудермес", systemImage: "map") {
-                    position = .region(
-                        MKCoordinateRegion(
-                            center: GeoPoint.gudermes.coordinate,
-                            span: MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08)
-                        ))
-                }
-                Button("Все доступные точки", systemImage: "arrow.up.left.and.arrow.down.right") {
-                    position = .automatic
-                }
-            } label: {
-                Label("Регион карты", systemImage: "globe.europe.africa")
-            }
-        }
-        ToolbarItem(placement: .topBarTrailing) {
-            Button {
-                locationService.requestLocation()
-            } label: {
-                Label("Моё местоположение", systemImage: "location")
-            }
-            .disabled(locationService.isRequesting)
         }
     }
 

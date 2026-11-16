@@ -14,6 +14,7 @@ final class PersistenceTests: XCTestCase {
         store.toggleFavorite(business)
         store.setAppearance(.light)
         store.setUserName("Локальное имя")
+        XCTAssertTrue(store.setProfile(name: "Локальное имя", avatarData: Data([1, 2, 3])))
         store.setNotifications(true)
         var draft = OrganizationDraft(category: .autoService)
         draft.name = "Мой черновик"
@@ -25,6 +26,7 @@ final class PersistenceTests: XCTestCase {
         XCTAssertTrue(reloaded.state.favorites.contains(business.id))
         XCTAssertEqual(reloaded.state.appearance, .light)
         XCTAssertEqual(reloaded.state.userName, "Локальное имя")
+        XCTAssertEqual(reloaded.state.avatarData, Data([1, 2, 3]))
         XCTAssertTrue(reloaded.state.notificationsEnabled)
         XCTAssertEqual(reloaded.state.drafts.first?.location, draft.location)
 

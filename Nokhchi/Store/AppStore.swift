@@ -39,6 +39,13 @@ final class AppStore {
         save(next)
     }
 
+    func setProfile(name: String, avatarData: Data?) -> Bool {
+        var next = state
+        next.userName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        next.avatarData = avatarData
+        return save(next)
+    }
+
     func toggleFavorite(_ business: Business) {
         var next = state
         if next.favorites.contains(business.id) {

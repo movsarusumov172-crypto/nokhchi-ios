@@ -36,7 +36,11 @@ struct ProfileView: View {
                 NavigationLink {
                     VIPView()
                 } label: {
-                    Label("VIP-продвижение", systemImage: "crown")
+                    Label {
+                        Text("VIP-продвижение")
+                    } icon: {
+                        Image(systemName: "crown.fill").foregroundStyle(vipGold)
+                    }
                 }
                 NavigationLink {
                     FavoritesView()
@@ -113,3 +117,5 @@ struct ProfileView: View {
         }
     }
 }
+
+let vipGold = Color(red: 0.83, green: 0.60, blue: 0.12)

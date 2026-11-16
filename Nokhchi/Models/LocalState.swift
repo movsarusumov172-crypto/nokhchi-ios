@@ -38,12 +38,14 @@ struct LocalState: Codable {
     var appearance: Appearance = .dark
     var notificationsEnabled = false
     var userName = "Мовсар Усумов"
+    var avatarData: Data?
     var favorites: Set<String> = []
     var drafts: [OrganizationDraft] = []
 
     var isValid: Bool {
         !userName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             && userName.count <= 80
+            && (avatarData.map { $0.count <= 1_000_000 } ?? true)
             && drafts.allSatisfy { $0.validationMessage == nil }
             && Set(drafts.map(\.id)).count == drafts.count
     }

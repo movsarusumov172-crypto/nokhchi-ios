@@ -4,7 +4,11 @@ struct VIPView: View {
     var body: some View {
         List {
             Section {
-                Label("VIP-продвижение", systemImage: "crown")
+                Label {
+                    Text("VIP-продвижение")
+                } icon: {
+                    Image(systemName: "crown.fill").foregroundStyle(vipGold)
+                }
                     .font(.headline)
                 Text("Статус подписки неизвестен: сервер Nokhchi не подключён.")
                     .foregroundStyle(.secondary)
