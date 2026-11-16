@@ -16,6 +16,12 @@ final class NokhchiUITests: XCTestCase {
         let business = app.cells.containing(.staticText, identifier: "КАРАК").firstMatch
         XCTAssertTrue(business.waitForExistence(timeout: 5))
         business.tap()
+        for _ in 0..<4 {
+            if app.buttons["В избранное"].exists || app.buttons["Убрать из избранного"].exists {
+                break
+            }
+            app.swipeUp()
+        }
         XCTAssertTrue(
             app.buttons["В избранное"].exists || app.buttons["Убрать из избранного"].exists
         )
@@ -30,7 +36,22 @@ final class NokhchiUITests: XCTestCase {
         XCTAssertTrue(app.textFields["draftName"].waitForExistence(timeout: 5))
         XCTAssertFalse(app.buttons["Сохранить"].isEnabled)
         capture("05-draft", app: app)
+        app.buttons["Далее"].tap()
+        XCTAssertTrue(app.staticTexts["Фотографии"].waitForExistence(timeout: 5))
+        capture("06-photos", app: app)
+        app.buttons["Далее"].tap()
+        XCTAssertTrue(app.staticTexts["Видео — необязательно"].waitForExistence(timeout: 5))
+        app.buttons["Далее"].tap()
+        XCTAssertTrue(app.textFields["draftCity"].waitForExistence(timeout: 5))
+        app.buttons["Далее"].tap()
+        XCTAssertTrue(app.switches["Круглосуточно"].waitForExistence(timeout: 5))
+        app.buttons["Далее"].tap()
+        XCTAssertTrue(app.staticTexts["Публикация"].waitForExistence(timeout: 5))
+        capture("07-preview", app: app)
         app.buttons["Отмена"].tap()
+        if app.buttons["Не сохранять"].waitForExistence(timeout: 2) {
+            app.buttons["Не сохранять"].tap()
+        }
 
         app.tabBars.buttons["Профиль"].tap()
         XCTAssertTrue(app.staticTexts["Мои бизнесы"].waitForExistence(timeout: 5))
