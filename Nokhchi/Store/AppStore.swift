@@ -111,8 +111,9 @@ final class AppStore {
 
     func addReview(_ review: LocalReview) -> Bool {
         guard (1...5).contains(review.rating),
-              !review.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
-              review.text.count <= 2000 else {
+            !review.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+            review.text.count <= 2000
+        else {
             errorMessage = "Укажите оценку и текст отзыва до 2000 символов."
             return false
         }

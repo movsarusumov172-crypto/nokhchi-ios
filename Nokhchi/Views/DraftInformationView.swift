@@ -2,7 +2,9 @@ import SwiftUI
 
 struct DraftInformationView: View {
     @Binding var draft: OrganizationDraft
-    private let supportedLanguages = ["Русский", "English", "العربية", "Deutsch", "Türkçe", "Français"]
+    private let supportedLanguages = [
+        "Русский", "English", "العربية", "Deutsch", "Türkçe", "Français",
+    ]
 
     var body: some View {
         Form {
@@ -25,19 +27,26 @@ struct DraftInformationView: View {
             } header: {
                 Text("Контакты")
             } footer: {
-                Text("На снимке указан минимум один контакт для публикации. Черновик можно сохранить позже.")
+                Text(
+                    "На снимке указан минимум один контакт для публикации. Черновик можно сохранить позже."
+                )
             }
             Section("Языки обслуживания") {
                 ForEach(supportedLanguages, id: \.self) { language in
-                    Toggle(language, isOn: Binding(
-                        get: { draft.languages?.contains(language) == true },
-                        set: { selected in
-                            var languages = draft.languages ?? []
-                            if selected { languages.append(language) }
-                            else { languages.removeAll { $0 == language } }
-                            draft.languages = languages
-                        }
-                    ))
+                    Toggle(
+                        language,
+                        isOn: Binding(
+                            get: { draft.languages?.contains(language) == true },
+                            set: { selected in
+                                var languages = draft.languages ?? []
+                                if selected {
+                                    languages.append(language)
+                                } else {
+                                    languages.removeAll { $0 == language }
+                                }
+                                draft.languages = languages
+                            }
+                        ))
                 }
             }
         }

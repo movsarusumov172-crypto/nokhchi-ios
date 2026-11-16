@@ -16,9 +16,11 @@ struct ReportView: View {
                     TextField("Комментарий (необязательно)", text: $comment, axis: .vertical)
                 }
                 Section {
-                    Text("Отправка жалоб недоступна без сервера Nokhchi. "
-                         + "Данные этой формы никуда не отправляются.")
-                        .foregroundStyle(.secondary)
+                    Text(
+                        "Отправка жалоб недоступна без сервера Nokhchi. "
+                            + "Данные этой формы никуда не отправляются."
+                    )
+                    .foregroundStyle(.secondary)
                 }
             }
             .navigationTitle("Пожаловаться")

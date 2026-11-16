@@ -30,8 +30,10 @@ struct DraftPhotosView: View {
             } header: {
                 Text("Фотографии")
             } footer: {
-                Text("На снимке для публикации требуется от 3 до 10 фото, "
-                     + "минимум 1080 пикселей по короткой стороне. Черновик сохраняется и без них.")
+                Text(
+                    "На снимке для публикации требуется от 3 до 10 фото, "
+                        + "минимум 1080 пикселей по короткой стороне. Черновик сохраняется и без них."
+                )
             }
             Section("Пример: что снять") {
                 Text("Для IT и дизайна: проекты, рабочее место, портфолио или логотип.")
@@ -58,12 +60,14 @@ struct DraftPhotosView: View {
             for item in items {
                 try Task.checkCancellation()
                 guard let data = try await item.loadTransferable(type: Data.self),
-                      let image = UIImage(data: data),
-                      let pixels = image.cgImage,
-                      min(pixels.width, pixels.height) >= 1080,
-                      let jpeg = image.jpegData(compressionQuality: 0.7),
-                      jpeg.count <= 3_000_000 else {
-                    errorMessage = "Фото должно быть не меньше 1080 пикселей по короткой стороне и до 3 МБ после сжатия."
+                    let image = UIImage(data: data),
+                    let pixels = image.cgImage,
+                    min(pixels.width, pixels.height) >= 1080,
+                    let jpeg = image.jpegData(compressionQuality: 0.7),
+                    jpeg.count <= 3_000_000
+                else {
+                    errorMessage =
+                        "Фото должно быть не меньше 1080 пикселей по короткой стороне и до 3 МБ после сжатия."
                     return
                 }
                 photos.append(jpeg)

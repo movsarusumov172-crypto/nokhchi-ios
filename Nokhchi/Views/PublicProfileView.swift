@@ -11,7 +11,9 @@ struct PublicProfileView: View {
                     Text("Нет локальных черновиков").foregroundStyle(.secondary)
                 }
                 ForEach(store.state.drafts) { draft in
-                    NavigationLink { DraftPreviewView(draft: draft) } label: {
+                    NavigationLink {
+                        DraftPreviewView(draft: draft)
+                    } label: {
                         VStack(alignment: .leading) {
                             Text(draft.name)
                             Text("\(draft.city) · черновик")

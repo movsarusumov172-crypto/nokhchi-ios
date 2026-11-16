@@ -24,9 +24,12 @@ struct DraftPreviewView: View {
                 if !draft.note.isEmpty { Text(draft.note) }
             }
             Section("Публикация") {
-                Text("Это локальный предпросмотр. Отправка на проверку и публикация "
-                     + "недоступны без сервера Nokhchi.")
-                if let message = draft.validationMessage { Text(message).foregroundStyle(.secondary) }
+                Text(
+                    "Это локальный предпросмотр. Отправка на проверку и публикация "
+                        + "недоступны без сервера Nokhchi.")
+                if let message = draft.validationMessage {
+                    Text(message).foregroundStyle(.secondary)
+                }
             }
         }
     }

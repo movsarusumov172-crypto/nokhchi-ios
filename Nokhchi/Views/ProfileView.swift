@@ -73,10 +73,14 @@ struct ProfileView: View {
                         + "Оформление применяется ко всему приложению и сохраняется.")
             }
             Section {
-                NavigationLink { ScreenshotPolicyView(policy: .terms) } label: {
+                NavigationLink {
+                    ScreenshotPolicyView(policy: .terms)
+                } label: {
                     Label("Условия использования", systemImage: "doc.text")
                 }
-                NavigationLink { ScreenshotPolicyView(policy: .privacy) } label: {
+                NavigationLink {
+                    ScreenshotPolicyView(policy: .privacy)
+                } label: {
                     Label("Политика конфиденциальности", systemImage: "hand.raised")
                 }
                 informationLink(

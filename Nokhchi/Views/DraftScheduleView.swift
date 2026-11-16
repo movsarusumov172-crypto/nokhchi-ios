@@ -7,14 +7,18 @@ struct DraftScheduleView: View {
 
     var body: some View {
         Form {
-            Section("Часы работы") {
-                Toggle("Круглосуточно", isOn: Binding(
-                    get: { draft.alwaysOpen == true }, set: { draft.alwaysOpen = $0 }
-                ))
+            Section {
+                Toggle(
+                    "Круглосуточно",
+                    isOn: Binding(
+                        get: { draft.alwaysOpen == true }, set: { draft.alwaysOpen = $0 }
+                    ))
                 if draft.alwaysOpen != true {
                     DatePicker("Открытие", selection: $opening, displayedComponents: .hourAndMinute)
                     DatePicker("Закрытие", selection: $closing, displayedComponents: .hourAndMinute)
                 }
+            } header: {
+                Text("Часы работы")
             } footer: {
                 Text("Одинаковое расписание на все дни. Можно указать закрытие после полуночи.")
             }

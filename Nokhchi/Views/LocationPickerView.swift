@@ -44,7 +44,8 @@ struct LocationPickerView: View {
                         .onSubmit { Task { await searchAddress() } }
                     HStack {
                         Button("Найти") { Task { await searchAddress() } }
-                            .disabled(search.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                            .disabled(
+                                search.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                         Spacer()
                         Button("Моё место") { locationService.requestLocation() }
                             .disabled(locationService.isRequesting)
@@ -56,10 +57,18 @@ struct LocationPickerView: View {
             .onChange(of: locationService.location) { _, location in
                 if let location { centerMap(location.coordinate) }
             }
-            .alert("Адрес", isPresented: Binding(
-                get: { searchError != nil || locationService.errorMessage != nil },
-                set: { if !$0 { searchError = nil; locationService.errorMessage = nil } }
-            )) {
+            .alert(
+                "Адрес",
+                isPresented: Binding(
+                    get: { searchError != nil || locationService.errorMessage != nil },
+                    set: {
+                        if !$0 {
+                            searchError = nil
+                            locationService.errorMessage = nil
+                        }
+                    }
+                )
+            ) {
                 Button("Понятно", role: .cancel) {
                     searchError = nil
                     locationService.errorMessage = nil
@@ -116,8 +125,10 @@ struct LocationPickerView: View {
     }
 
     private func centerMap(_ coordinate: CLLocationCoordinate2D) {
-        position = .region(MKCoordinateRegion(
-            center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
-        ))
+        position = .region(
+            MKCoordinateRegion(
+                center: coordinate,
+                span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+            ))
     }
 }

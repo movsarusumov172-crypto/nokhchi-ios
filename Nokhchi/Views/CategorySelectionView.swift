@@ -25,8 +25,8 @@ struct CategorySelectionView: View {
                     }
                 }
                 Text("Далее: информация, фото, видео, адрес, часы работы и предпросмотр.")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
             }
             .padding()
         }

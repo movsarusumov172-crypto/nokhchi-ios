@@ -6,7 +6,7 @@ struct DraftAddressView: View {
 
     var body: some View {
         Form {
-            Section("Адрес") {
+            Section {
                 TextField("Город", text: $draft.city).accessibilityIdentifier("draftCity")
                 TextField("Адрес", text: $draft.address, axis: .vertical).lineLimit(2...4)
                 Button("Выбрать точку на карте", systemImage: "mappin.and.ellipse") {
@@ -17,6 +17,8 @@ struct DraftAddressView: View {
                         .font(.caption).foregroundStyle(.secondary)
                     Button("Удалить точку", role: .destructive) { draft.location = nil }
                 }
+            } header: {
+                Text("Адрес")
             } footer: {
                 Text("Введите адрес и выберите точку на карте. В поиске используется Apple Maps.")
             }

@@ -29,8 +29,9 @@ struct DraftVideoView: View {
             } header: {
                 Text("Видео — необязательно")
             } footer: {
-                Text("На снимке указаны 5–60 секунд и минимум 720 пикселей. "
-                     + "Файл хранится локально и не сжимается автоматически.")
+                Text(
+                    "На снимке указаны 5–60 секунд и минимум 720 пикселей. "
+                        + "Файл хранится локально и не сжимается автоматически.")
             }
             Section("Пример: что снять") {
                 Text("Для IT и дизайна: короткая демонстрация готового проекта на экране.")
@@ -62,12 +63,14 @@ struct DraftVideoView: View {
             }
             let size = try await track.load(.naturalSize)
             guard duration.isFinite, (5...60).contains(duration),
-                  min(abs(size.width), abs(size.height)) >= 720 else {
+                min(abs(size.width), abs(size.height)) >= 720
+            else {
                 errorMessage = "Видео должно длиться 5–60 секунд и иметь разрешение не менее 720p."
                 return
             }
             let attributes = try FileManager.default.attributesOfItem(atPath: url.path)
-            guard let fileSize = attributes[.size] as? NSNumber, fileSize.intValue <= 200_000_000 else {
+            guard let fileSize = attributes[.size] as? NSNumber, fileSize.intValue <= 200_000_000
+            else {
                 errorMessage = "Размер видео не должен превышать 200 МБ."
                 return
             }

@@ -91,8 +91,9 @@ final class PersistenceTests: XCTestCase {
         draft.photos = [Data([1, 2, 3])]
         draft.alwaysOpen = true
         XCTAssertTrue(store.saveDraft(draft))
-        let review = LocalReview(businessID: "example", author: "Участник", rating: 4,
-                                 text: "Личный опыт")
+        let review = LocalReview(
+            businessID: "example", author: "Участник", rating: 4,
+            text: "Личный опыт")
         XCTAssertTrue(store.addReview(review))
         let reloaded = AppStore(directory: directory, loadCatalog: false)
         XCTAssertEqual(reloaded.state.drafts.first?.languages, ["Русский", "English"])

@@ -47,20 +47,27 @@ struct DraftEditorView: View {
                 .padding()
                 .background(Color(uiColor: .systemGroupedBackground))
             }
-            .confirmationDialog("Не сохранять изменения?", isPresented: $showingDiscard,
-                                titleVisibility: .visible) {
+            .confirmationDialog(
+                "Не сохранять изменения?", isPresented: $showingDiscard,
+                titleVisibility: .visible
+            ) {
                 Button("Не сохранять", role: .destructive) {
                     removeUnsavedVideo()
                     dismiss()
                 }
                 Button("Продолжить редактирование", role: .cancel) { showingDiscard = false }
             }
-            .alert("Не удалось сохранить", isPresented: Binding(
-                get: { store.errorMessage != nil },
-                set: { if !$0 { store.errorMessage = nil } }
-            )) {
+            .alert(
+                "Не удалось сохранить",
+                isPresented: Binding(
+                    get: { store.errorMessage != nil },
+                    set: { if !$0 { store.errorMessage = nil } }
+                )
+            ) {
                 Button("Понятно", role: .cancel) { store.errorMessage = nil }
-            } message: { Text(store.errorMessage ?? "") }
+            } message: {
+                Text(store.errorMessage ?? "")
+            }
         }
         .onAppear { if original == nil { original = draft } }
         .interactiveDismissDisabled(draft != original)
@@ -71,8 +78,10 @@ struct DraftEditorView: View {
         switch step {
         case 2: DraftInformationView(draft: $draft)
         case 3: DraftPhotosView(draft: $draft, loading: $loadingMedia)
-        case 4: DraftVideoView(draft: $draft, originalVideo: original?.videoFile,
-                               loading: $loadingMedia)
+        case 4:
+            DraftVideoView(
+                draft: $draft, originalVideo: original?.videoFile,
+                loading: $loadingMedia)
         case 5: DraftAddressView(draft: $draft)
         case 6: DraftScheduleView(draft: $draft)
         default: DraftPreviewView(draft: draft)

@@ -31,12 +31,15 @@ struct BusinessDetailView: View {
             }
             if business.id == "screenshot-karak" {
                 Section("Описание со снимка") {
-                    Text("Ресторан Вайнахской кухни. Вкус, который помнят поколения. "
-                         + "Халяльная еда и уютная атмосфера.")
+                    Text(
+                        "Ресторан Вайнахской кухни. Вкус, который помнят поколения. "
+                            + "Халяльная еда и уютная атмосфера.")
                 }
                 Section("Контакты") {
-                    Text("Телефон, WhatsApp, Instagram и сайт показаны на снимке, "
-                         + "но их адреса не видны.").foregroundStyle(.secondary)
+                    Text(
+                        "Телефон, WhatsApp, Instagram и сайт показаны на снимке, "
+                            + "но их адреса не видны."
+                    ).foregroundStyle(.secondary)
                 }
                 Section("Часы работы на снимке") {
                     LabeledContent("Каждый день", value: "09:00–01:30")
@@ -73,18 +76,20 @@ struct BusinessDetailView: View {
             Section("Источник данных") {
                 DemoNotice()
                 Text("Данные перенесены со снимков и могут быть устаревшими.")
-                .foregroundStyle(.secondary)
+                    .foregroundStyle(.secondary)
             }
             Section("Отзывы") {
                 if business.id == "screenshot-karak" {
                     VStack(alignment: .leading, spacing: 6) {
                         Text("inbinb · 5 из 5").font(.headline)
-                        Text("Живу рядом с местом, был не раз... кто хочет вспомнить "
-                             + "домашний уют и вкус, место самое подходящее!")
+                        Text(
+                            "Живу рядом с местом, был не раз... кто хочет вспомнить "
+                                + "домашний уют и вкус, место самое подходящее!")
                         Text("Отзыв со снимка").font(.caption).foregroundStyle(.secondary)
                     }
                 }
-                ForEach((store.state.reviews ?? []).filter { $0.businessID == business.id }) { review in
+                ForEach((store.state.reviews ?? []).filter { $0.businessID == business.id }) {
+                    review in
                     VStack(alignment: .leading, spacing: 6) {
                         Text("\(review.author) · \(review.rating) из 5").font(.headline)
                         Text(review.text)
@@ -103,11 +108,16 @@ struct BusinessDetailView: View {
         .sensoryFeedback(.selection, trigger: isFavorite)
         .sheet(isPresented: $showingReview) { ReviewEditorView(business: business) }
         .sheet(isPresented: $showingReport) { ReportView() }
-        .alert("Адрес", isPresented: Binding(
-            get: { mapError != nil }, set: { if !$0 { mapError = nil } }
-        )) {
+        .alert(
+            "Адрес",
+            isPresented: Binding(
+                get: { mapError != nil }, set: { if !$0 { mapError = nil } }
+            )
+        ) {
             Button("Понятно", role: .cancel) { mapError = nil }
-        } message: { Text(mapError ?? "") }
+        } message: {
+            Text(mapError ?? "")
+        }
     }
 
     private var isFavorite: Bool { store.state.favorites.contains(business.id) }
