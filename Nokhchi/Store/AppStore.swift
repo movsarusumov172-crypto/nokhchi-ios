@@ -89,7 +89,10 @@ final class AppStore {
     }
 
     func importVideo(from source: URL) throws -> String {
-        let filename = UUID().uuidString + ".mov"
+        let supportedExtensions = ["mov", "mp4", "m4v"]
+        let sourceExtension = source.pathExtension.lowercased()
+        let fileExtension = supportedExtensions.contains(sourceExtension) ? sourceExtension : "mov"
+        let filename = UUID().uuidString + "." + fileExtension
         guard let destination = videoURL(filename) else { throw StoreError.invalidData }
         try FileManager.default.createDirectory(
             at: destination.deletingLastPathComponent(), withIntermediateDirectories: true

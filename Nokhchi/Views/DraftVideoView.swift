@@ -1,4 +1,5 @@
 import AVKit
+import PhotosUI
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -10,13 +11,17 @@ struct DraftVideoView: View {
     @State private var showingPicker = false
     @State private var errorMessage: String?
     @State private var importTask: Task<Void, Never>?
+    @State private var selectedVideo: PhotosPickerItem?
 
     var body: some View {
         Form {
             Section {
+                PhotosPicker("Выбрать видео из Фото", selection: $selectedVideo, matching: .videos)
+                    .disabled(loading)
                 Button("Выбрать видео в Файлах", systemImage: "video.badge.plus") {
                     showingPicker = true
                 }
+                .disabled(loading)
                 if loading { ProgressView("Проверка видео") }
                 if let errorMessage { Text(errorMessage).foregroundStyle(.red) }
                 if let filename = draft.videoFile, let url = store.videoURL(filename) {
@@ -46,7 +51,40 @@ struct DraftVideoView: View {
                 errorMessage = "Не удалось выбрать видео: \(error.localizedDescription)"
             }
         }
+        .onChange(of: selectedVideo) { _, item in
+            guard let item else { return }
+            importTask?.cancel()
+            importTask = Task { await importPhotoVideo(item) }
+        }
         .onDisappear { importTask?.cancel() }
+    }
+
+    private func importPhotoVideo(_ item: PhotosPickerItem) async {
+        loading = true
+        defer {
+            loading = false
+            selectedVideo = nil
+        }
+        do {
+            guard let video = try await item.loadTransferable(type: TemporaryVideo.self) else {
+                errorMessage = "Не удалось получить выбранное видео."
+                return
+            }
+            defer {
+                do {
+                    try FileManager.default.removeItem(at: video.url)
+                } catch {
+                    store.errorMessage = "Не удалось удалить временное видео: "
+                        + error.localizedDescription
+                }
+            }
+            try Task.checkCancellation()
+            await importVideo(video.url)
+        } catch is CancellationError {
+            return
+        } catch {
+            errorMessage = "Не удалось загрузить видео из Фото: \(error.localizedDescription)"
+        }
     }
 
     private func importVideo(_ url: URL) async {
@@ -85,4 +123,28 @@ struct DraftVideoView: View {
             errorMessage = "Не удалось сохранить видео: \(error.localizedDescription)"
         }
     }
+}
+
+private struct TemporaryVideo: Transferable {
+    let url: URL
+
+    static var transferRepresentation: some TransferRepresentation {
+        FileRepresentation(importedContentType: .movie) { file in
+            let attributes = try FileManager.default.attributesOfItem(atPath: file.file.path)
+            guard let size = attributes[.size] as? NSNumber, size.intValue <= 200_000_000 else {
+                throw VideoImportError.tooLarge
+            }
+            let destination = FileManager.default.temporaryDirectory
+                .appendingPathComponent(UUID().uuidString)
+                .appendingPathExtension(file.file.pathExtension)
+            try FileManager.default.copyItem(at: file.file, to: destination)
+            return TemporaryVideo(url: destination)
+        }
+    }
+}
+
+private enum VideoImportError: LocalizedError {
+    case tooLarge
+
+    var errorDescription: String? { "Размер видео не должен превышать 200 МБ." }
 }
