@@ -2,6 +2,13 @@
 
 ## Дополнительные экраны по 24 снимкам
 
+Последний IPA с идентификатором кнопки для UI-теста собран в
+[run 43855909241](https://github.com/movsarusumov172-crypto/nokhchi-ios/actions/runs/43855909241),
+commit `6439033`, Xcode 26.3. Release-сборка и lint прошли; архив IPA и контрольная
+сумма проверены. SHA256 неподписанного IPA:
+`7151782c2a8cbdfaffb746953e47b9457e0bf67765e46fad4e00fdfabda16b04`.
+На момент записи тесты симулятора ещё выполняются. Результат нужно смотреть в запуске.
+
 Окончательный Release с именованными ограничениями медиа собран в публичном
 [run 43854893805](https://github.com/movsarusumov172-crypto/nokhchi-ios/actions/runs/43854893805),
 commit `5afa654`, Xcode 26.3. Линтер и Release прошли. SHA256 неподписанного IPA:
