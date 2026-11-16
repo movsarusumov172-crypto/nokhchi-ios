@@ -1,0 +1,128 @@
+name: iOS build and tests
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  iphone:
+    name: Release for iPhone
+    runs-on: macos-15
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          sudo xcode-select --switch /Applications/Xcode_26.3.app/Contents/Developer
+          xcodebuild -version
+          mkdir -p build
+
+      - name: Format and lint Swift
+        run: |
+          xcrun swift-format format --in-place --recursive Nokhchi NokhchiTests NokhchiUITests
+          git diff --binary > build/format.patch
+          xcrun swift-format lint --strict --recursive Nokhchi NokhchiTests NokhchiUITests
+
+      - name: Build Release without signing
+        run: |
+          set -o pipefail
+          xcodebuild -project Nokhchi.xcodeproj -scheme Nokhchi -configuration Release \
+            -destination 'generic/platform=iOS' -derivedDataPath build/Release \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY='' \
+            build 2>&1 | tee build/release.log
+
+      - name: Package unsigned IPA
+        run: |
+          mkdir -p build/package/Payload
+          cp -R build/Release/Build/Products/Release-iphoneos/Nokhchi.app build/package/Payload/
+          cd build/package
+          zip --symlinks -qr ../Nokhchi-unsigned.ipa Payload
+          cd ..
+          shasum -a 256 Nokhchi-unsigned.ipa > SHA256.txt
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Nokhchi-unsigned-ipa
+          path: |
+            build/Nokhchi-unsigned.ipa
+            build/SHA256.txt
+          if-no-files-found: error
+          retention-days: 14
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: iphone-build-logs
+          path: |
+            build/release.log
+            build/format.patch
+          retention-days: 14
+
+  simulator:
+    name: Simulator and tests
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode and simulator
+        run: |
+          sudo xcode-select --switch /Applications/Xcode_26.3.app/Contents/Developer
+          xcodebuild -version
+          mkdir -p build
+          xcrun simctl list devices available --json > build/devices.json
+          simulator_id=$(jq -er '
+            .devices | to_entries
+            | map(select(.key | contains("iOS"))) | sort_by(.key) | reverse
+            | .[0].value | map(select(.isAvailable and (.name | startswith("iPhone"))))
+            | .[0].udid' build/devices.json)
+          echo "SIMULATOR_ID=$simulator_id" >> "$GITHUB_ENV"
+          echo "Selected simulator: $simulator_id"
+          xcrun simctl boot "$simulator_id"
+          xcrun simctl bootstatus "$simulator_id" -b
+          xcrun simctl status_bar "$simulator_id" override --time '9:41' --batteryState charged \
+            --batteryLevel 100
+
+      - name: Format and lint Swift
+        run: |
+          xcrun swift-format format --in-place --recursive Nokhchi NokhchiTests NokhchiUITests
+          xcrun swift-format lint --strict --recursive Nokhchi NokhchiTests NokhchiUITests
+
+      - name: Run unit and UI tests
+        run: |
+          set -o pipefail
+          xcodebuild -project Nokhchi.xcodeproj -scheme Nokhchi -configuration Debug \
+            -destination "platform=iOS Simulator,id=$SIMULATOR_ID" \
+            -derivedDataPath build/Simulator -resultBundlePath build/Tests.xcresult \
+            -parallel-testing-enabled NO CODE_SIGNING_ALLOWED=NO \
+            test 2>&1 | tee build/tests.log
+
+      - name: Export screenshots and test summary
+        if: always()
+        run: |
+          if [ -d build/Tests.xcresult ]; then
+            xcrun xcresulttool export attachments --path build/Tests.xcresult \
+              --output-path build/screenshots
+            xcrun xcresulttool get test-results summary --path build/Tests.xcresult \
+              --format json > build/test-summary.json
+          fi
+
+      - name: Package simulator app
+        run: |
+          ditto -c -k --keepParent build/Simulator/Build/Products/Debug-iphonesimulator/Nokhchi.app \
+            build/Nokhchi-simulator.zip
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: simulator-test-results
+          path: |
+            build/tests.log
+            build/test-summary.json
+            build/Tests.xcresult
+            build/screenshots
+            build/Nokhchi-simulator.zip
+          retention-days: 14
