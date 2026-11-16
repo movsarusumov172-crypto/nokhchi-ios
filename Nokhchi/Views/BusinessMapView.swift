@@ -57,12 +57,17 @@ struct BusinessMapView: View {
         .safeAreaInset(edge: .top, spacing: 0) {
             VStack(spacing: 4) {
                 HStack {
-                    Button { selectedTab = 3 } label: {
-                        ProfileAvatar(name: store.state.userName, data: store.state.avatarData, size: 40)
+                    Button {
+                        selectedTab = 3
+                    } label: {
+                        ProfileAvatar(
+                            name: store.state.userName, data: store.state.avatarData, size: 40)
                     }
                     .accessibilityLabel("Открыть профиль")
                     Spacer()
-                    Button { showingNotifications = true } label: {
+                    Button {
+                        showingNotifications = true
+                    } label: {
                         Image(systemName: "bell")
                             .frame(width: 44, height: 44)
                             .background(.regularMaterial, in: Circle())
@@ -75,7 +80,9 @@ struct BusinessMapView: View {
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
             HStack(alignment: .bottom) {
-                Button { showingSource = true } label: {
+                Button {
+                    showingSource = true
+                } label: {
                     Label("О карте", systemImage: "info.circle")
                         .padding(10)
                         .background(.regularMaterial, in: Capsule())
@@ -83,10 +90,11 @@ struct BusinessMapView: View {
                 Spacer()
                 Menu {
                     Button("Гудермес", systemImage: "map") {
-                        position = .region(MKCoordinateRegion(
-                            center: GeoPoint.gudermes.coordinate,
-                            span: MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08)
-                        ))
+                        position = .region(
+                            MKCoordinateRegion(
+                                center: GeoPoint.gudermes.coordinate,
+                                span: MKCoordinateSpan(latitudeDelta: 0.08, longitudeDelta: 0.08)
+                            ))
                     }
                     Button("Все доступные точки", systemImage: "globe") { position = .automatic }
                 } label: {
@@ -95,7 +103,9 @@ struct BusinessMapView: View {
                         .background(.regularMaterial, in: Circle())
                 }
                 .accessibilityLabel("Регион карты")
-                Button { locationService.requestLocation() } label: {
+                Button {
+                    locationService.requestLocation()
+                } label: {
                     Image(systemName: "location.fill")
                         .frame(width: 44, height: 44)
                         .background(.regularMaterial, in: Circle())

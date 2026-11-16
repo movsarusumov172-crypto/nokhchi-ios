@@ -9,7 +9,7 @@ struct VIPView: View {
                 } icon: {
                     Image(systemName: "crown.fill").foregroundStyle(vipGold)
                 }
-                    .font(.headline)
+                .font(.headline)
                 Text("Статус подписки неизвестен: сервер Nokhchi не подключён.")
                     .foregroundStyle(.secondary)
             }

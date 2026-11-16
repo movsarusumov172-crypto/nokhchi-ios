@@ -1,5 +1,5 @@
-import SwiftUI
 import PhotosUI
+import SwiftUI
 
 struct ProfileEditorView: View {
     @Environment(AppStore.self) private var store
@@ -51,14 +51,16 @@ struct ProfileEditorView: View {
             Task {
                 do {
                     guard let data = try await photo?.loadTransferable(type: Data.self),
-                          let image = UIImage(data: data) else {
+                        let image = UIImage(data: data)
+                    else {
                         store.errorMessage = "Не удалось прочитать выбранное фото."
                         return
                     }
                     let size = CGSize(width: 256, height: 256)
                     let renderer = UIGraphicsImageRenderer(size: size)
                     let scale = max(size.width / image.size.width, size.height / image.size.height)
-                    let imageSize = CGSize(width: image.size.width * scale, height: image.size.height * scale)
+                    let imageSize = CGSize(
+                        width: image.size.width * scale, height: image.size.height * scale)
                     let origin = CGPoint(
                         x: (size.width - imageSize.width) / 2,
                         y: (size.height - imageSize.height) / 2

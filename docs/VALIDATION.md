@@ -1,5 +1,13 @@
 # Фактическая проверка — 16 ноября 2026
 
+## Обновление карты и профиля
+
+Release исходного commit `e164b37` собран для iPhone через публичный GitHub Actions:
+[run 43842126009](https://github.com/movsarusumov172-crypto/nokhchi-ios/actions/runs/43842126009).
+Форматирование и lint на Xcode 26.3 прошли. Неподписанный IPA скачан на D, его SHA256:
+`407168ebee0e61c9edbbeac94e2d2a71f38297834d98c2001cac5efe35641f7d`.
+Работу внешнего вида и установки на физическом iPhone пока не проверяли.
+
 ## Дополнительная сборка в GitHub Actions
 
 По запросу владельца создан репозиторий `movsarusumov172-crypto/nokhchi-ios` и вручную
