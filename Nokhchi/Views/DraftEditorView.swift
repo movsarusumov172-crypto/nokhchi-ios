@@ -12,11 +12,14 @@ struct DraftEditorView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                ProgressView(value: Double(step), total: 7)
-                    .padding(.horizontal)
+                HStack {
+                    ProgressView(value: Double(step), total: 7)
+                    Text("\(step)/7").font(.caption).foregroundStyle(.secondary)
+                }
+                .padding(.horizontal)
                 content
             }
-            .navigationTitle("\(stepTitle) · \(step)/7")
+            .navigationTitle(stepTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
